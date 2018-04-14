@@ -80,7 +80,7 @@ port (
 	);
 end component;
 --control signals
-signal ALU_MAC_STATUS: std_logic_vector(1 downto 0) := "00"; 
+signal ALU_MAC_STATUS: std_logic := '0'; 
 signal shift_left_or_right: std_logic; --'0' for right, '1' for left
 signal AU_clk: std_logic := '0'; -- clock for AU
 signal ALU_IN_MUX_SEL: std_logic; -- '0' for AU , '1' for Shift unit
@@ -149,43 +149,36 @@ begin
 		if rising_edge(clk) then
 		case Opcode is
 		when "1000" | "1001" => --shift opcode
-			if ALU_MAC_STATUS="00" then
+			if ALU_MAC_STATUS='0' then
 			shift_left_or_right <= Opcode(0); --'0' for right, '1' for left
 			AU_clk <= '0'; -- clock for AU
 			ALU_IN_MUX_SEL <= '1'; -- '0' for AU , '1' for Shift unit
 			ALU_OUT_SELECTOR_SEL <= "00"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 			end if;
 		when "0101" | "0110" | "0001" | "0010" | "0111" => -- MIN/MAX/ADD/SUB/RST
-			if ALU_MAC_STATUS="00" then
+			if ALU_MAC_STATUS='0' then
 			AU_clk <= (not AU_clk); -- clock for AU
 			ALU_IN_MUX_SEL <= '0'; -- '0' for AU , '1' for Shift unit
 			ALU_OUT_SELECTOR_SEL <= "01"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 			end if;
 		when "0011" => -- MUL OPCODE
-			if ALU_MAC_STATUS="00" then
+			if ALU_MAC_STATUS='0' then
 			AU_clk <= (not AU_clk); -- clock for AU
 			ALU_IN_MUX_SEL <= '0'; -- '0' for AU , '1' for Shift unit
 			ALU_OUT_SELECTOR_SEL <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 			end if;			
 		when "0100" => --MAC OPCODE
-				case ALU_MAC_STATUS is
-					when "00" => -- first MAC Clock
-					ALU_MAC_STATUS <= "01";					
-					AU_clk <= (not AU_clk); -- clock for AU
-					ALU_IN_MUX_SEL <= '0'; -- '0' for AU , '1' for Shift unit
-					ALU_OUT_SELECTOR_SEL <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
-					when "01" => -- second MAC Clock
-					ALU_MAC_STATUS <= "10";
-					AU_clk <= (not AU_clk); -- clock for AU
-					ALU_OUT_SELECTOR_SEL <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
-					when "10" =>
-					AU_clk <= (not AU_clk); -- clock for AU
-					ALU_MAC_STATUS <= "00";	
-					when others =>
-					ALU_MAC_STATUS <= "00";	
-				end case;
+			if ALU_MAC_STATUS='0' then
+				ALU_MAC_STATUS <= '1';					
+				AU_clk <= (not AU_clk); -- clock for AU
+				ALU_IN_MUX_SEL <= '0'; -- '0' for AU , '1' for Shift unit
+				ALU_OUT_SELECTOR_SEL <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
+			else
+				AU_clk <= (not AU_clk); -- clock for AU
+				ALU_MAC_STATUS <= '0';
+			end if;
 		when others =>
-			ALU_MAC_STATUS <= "00";	
+			ALU_MAC_STATUS <= '0';	
 			AU_clk <= '0'; -- clock for AU
 			ALU_OUT_SELECTOR_SEL <= "11"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 		end case;

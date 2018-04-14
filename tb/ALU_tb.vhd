@@ -34,7 +34,7 @@ port (
 end component;  
 
 constant TIME_DELTA : time := 20  ps;
-constant MAC_TIME_DELTA : time := 60  ps;
+constant CLOCK_TIME_DELTA : time := 20  ps;
 constant numOfClockCounter: integer := 1000000000;
 signal A : std_logic_vector(7 downto 0);
 signal B : std_logic_vector(7 downto 0);
@@ -77,9 +77,11 @@ begin
 			Opcode <= Opcode_val;
 			--WAIT TIMING 
 			if Opcode_val="0100" then --MAC OP NEED different time delta
-			wait for MAC_TIME_DELTA;
-			else
-			wait for TIME_DELTA;
+			--wait for 2 clocks
+			wait for CLOCK_TIME_DELTA;
+			wait for CLOCK_TIME_DELTA;
+			else -- wait for 1 clock
+			wait for CLOCK_TIME_DELTA;
 			end if;
 			--CHECK RESULT
 			assert OUT_LO=expected_result_LO report "FAIL : result low fail in test number :" & integer'image(test_number);
