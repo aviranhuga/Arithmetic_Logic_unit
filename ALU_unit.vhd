@@ -46,7 +46,6 @@ port (
 	clk_cu : in std_logic := '0';
 	shift_left_or_right_cu: out std_logic; --'0' for right, '1' for left
 	AU_clk_cu: out std_logic; -- clock for AU	
-	ALU_IN_MUX_SEL_cu: out std_logic; -- '0' for AU , '1' for Shift unit
 	ALU_OUT_SELECTOR_SEL_cu : out std_logic_vector(1 downto 0) --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros	
 	);
 end component;
@@ -61,19 +60,6 @@ port (
 	HI : out std_logic_vector(N-1 downto 0);
 	LO : out std_logic_vector(N-1 downto 0);
 	status: out std_logic_vector(5 downto 0)
-	);
-end component;
-
-component AU_IN_MUX 
-generic ( N: integer :=8);
-port (
-	input_a : in std_logic_vector(N-1 downto 0);
-	input_b : in std_logic_vector(N-1 downto 0);	
-	SEL : in std_logic;
-	output1_a : out std_logic_vector(N-1 downto 0);--output for Arithmetic_unit
-	output1_b : out std_logic_vector(N-1 downto 0);--output for Arithmetic_unit
-	output2_a : out std_logic_vector(N-1 downto 0);--output for shift_unit
-	output2_b : out std_logic_vector(N-1 downto 0) --output for shift_unit	
 	);
 end component;
 
@@ -94,14 +80,9 @@ end component;
 signal ALU_MAC_STATUS: std_logic := '0'; 
 signal shift_left_or_right: std_logic; --'0' for right, '1' for left
 signal AU_clk: std_logic := '0'; -- clock for AU
-signal ALU_IN_MUX_SEL: std_logic; -- '0' for AU , '1' for Shift unit
 signal ALU_OUT_SELECTOR_SEL : std_logic_vector(1 downto 0); --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 
 --connection signals
-signal ALU_IN_MUX_output1_a: std_logic_vector(N-1 downto 0);
-signal ALU_IN_MUX_output1_b: std_logic_vector(N-1 downto 0);
-signal ALU_IN_MUX_output2_a: std_logic_vector(N-1 downto 0);
-signal ALU_IN_MUX_output2_b: std_logic_vector(N-1 downto 0);
 signal shift_unit_result: std_logic_vector(N-1 downto 0);
 signal AU_HI_output: std_logic_vector(N-1 downto 0);
 signal AU_LO_output: std_logic_vector(N-1 downto 0);
@@ -122,31 +103,19 @@ begin
 	output_HI => HI,
 	output_status => status);
 	
-	
-	ALU_IN_MUX_s: AU_IN_MUX
-	generic map(N)
-	port map(
-	input_a => A, 
-	input_b => B,
-	SEL => ALU_IN_MUX_SEL,
-	output1_a => ALU_IN_MUX_output1_a,
-	output1_b => ALU_IN_MUX_output1_b,
-	output2_a => ALU_IN_MUX_output2_a,
-	output2_b => ALU_IN_MUX_output2_b);
-	
 	shift_unit_s: shift_unit
 	generic map(N)
 	port map(
-	a => ALU_IN_MUX_output2_a,
-	b => ALU_IN_MUX_output2_b(4 downto 0),
+	a => A,
+	b => B(4 downto 0),
 	left_side => shift_left_or_right,
 	result => shift_unit_result);
 
 	Arithmetic_unit_s: Arithmetic_unit
 	generic map(N)
 	port map(
-	A => ALU_IN_MUX_output1_a,
-	B => ALU_IN_MUX_output1_b,
+	A => A,
+	B => B,
 	Opcode => Opcode,
 	clk => AU_clk,
 	HI => AU_HI_output,
@@ -159,7 +128,6 @@ begin
 	clk_cu => clk,
 	shift_left_or_right_cu => shift_left_or_right,
 	AU_clk_cu => AU_clk,
-	ALU_IN_MUX_SEL_cu => ALU_IN_MUX_SEL,
 	ALU_OUT_SELECTOR_SEL_cu => ALU_OUT_SELECTOR_SEL);
 	
 end ALU_unit_arch;

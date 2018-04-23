@@ -39,7 +39,7 @@ begin
 					B_OUT <= (others => input_b(N-1));
 					B_OUT(N-1 downto 0) <= input_b;
 		else 
-			    A_OUT <= inputMUL_a;
+			   A_OUT <= inputMUL_a;
 				B_OUT <= inputMAC_b;
 			end if;
 	end process;

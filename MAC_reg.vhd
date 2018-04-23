@@ -26,7 +26,7 @@ port (
 end MAC_reg;
 
 architecture MAC_reg_arch of MAC_reg is
-component DFF 
+component dff_for_mac 
 	port (
 	data : in std_logic;	
 	clk : in std_logic;	
@@ -37,7 +37,7 @@ end component;
 
 begin            
 	Array_Of_DFFs: for i in 0 to 2*N-1 generate
-		dffi: DFF port map(data => data(i),clk=>clk, reset=>reset, q=>q(i));
+		dffi: dff_for_mac port map(data => data(i),clk=>clk, reset=>reset, q=>q(i));
 	end generate Array_Of_DFFs;
 	
 end MAC_reg_arch;

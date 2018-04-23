@@ -52,6 +52,9 @@ begin
 						end if;
 			end if equal_check;
 			result(2*N-1 downto N) <= (others => '0');
+			else
+			result <= (others => '0');
 		end if check_en;
+		
 	end process;
 end min_max_arch;
