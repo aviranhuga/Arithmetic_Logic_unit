@@ -23,8 +23,10 @@ port (
 	key1_en : in std_logic;
 	key2_en : in std_logic;
 	clock : in std_logic;
-	HI_out : out std_logic_vector(7 downto 0);
-	LO_out : out std_logic_vector(7 downto 0);
+	HI_seven_seg1 : out std_logic_vector(6 downto 0);
+	HI_seven_seg2 : out std_logic_vector(6 downto 0);
+	LO_seven_seg1 : out std_logic_vector(6 downto 0);
+	LO_seven_seg2 : out std_logic_vector(6 downto 0);
 	Status_out : out std_logic_vector(5 downto 0)
 	);
 end top_entity;
@@ -63,8 +65,10 @@ port (
 	HI_in : in std_logic_vector(7 downto 0);
 	LO_in : in std_logic_vector(7 downto 0);
 	Status_in : in std_logic_vector(5 downto 0);
-	HI_out : out std_logic_vector(7 downto 0);
-	LO_out : out std_logic_vector(7 downto 0);
+	HI_seven_seg1 : out std_logic_vector(6 downto 0);
+	HI_seven_seg2 : out std_logic_vector(6 downto 0);
+	LO_seven_seg1 : out std_logic_vector(6 downto 0);
+	LO_seven_seg2 : out std_logic_vector(6 downto 0);
 	Status_out : out std_logic_vector(5 downto 0)
 	);
 end component;
@@ -114,8 +118,10 @@ begin
 	HI_in => ALU_HI_OUT,
 	LO_in => ALU_LO_OUT,
 	Status_in => ALU_Status_OUT,
-	HI_out => HI_out,
-	LO_out => LO_out,
+	HI_seven_seg1 => HI_seven_seg1,
+	HI_seven_seg2 => HI_seven_seg2,
+	LO_seven_seg1 => LO_seven_seg1,
+	LO_seven_seg2 => LO_seven_seg2,
 	Status_out => Status_out);
 	
 	alu_clk_tmp <= q_int(11);
