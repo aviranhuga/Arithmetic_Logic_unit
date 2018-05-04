@@ -38,7 +38,7 @@ end component;
 
 signal moving_carry: std_logic_vector(2*N-2 downto 0); 
 signal y_subtract : std_logic_vector(2*N-1 downto 0);
-signal cout : std_logic;
+--signal cout : std_logic;
 
 begin                                         
 -- xor y with sub for subtract op
@@ -53,7 +53,7 @@ begin
 			end generate LSB;
 			
 		MSB: if i=2*N-1 generate
-			FAi: FA port map (x(i),y_subtract(i),moving_carry(i-1),result(i),cout);
+			FAi: FA port map (x(i),y_subtract(i),moving_carry(i-1),result(i),open);
 			end generate MSB;
 			
 		REST_OF_BITS: if ((i/=0) AND (i/=2*N-1))  generate

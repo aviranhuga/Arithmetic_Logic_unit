@@ -25,12 +25,10 @@ component FPU_add_sub
 port (
 	A : in std_logic_vector(31 downto 0);
 	B : in std_logic_vector(31 downto 0);
-	sub : in std_logic;
 	result: out std_logic_vector(31 downto 0)
 	);
 end component;  
 
-signal sub_s : std_logic;
 signal A_s : std_logic_vector(31 downto 0);
 signal B_s : std_logic_vector(31 downto 0);
 signal result_s : std_logic_vector(31 downto 0);
@@ -42,8 +40,7 @@ begin
         tester : FPU_add_sub
         port map(A=>A_s, 
                  B=>B_s, 
-                 result=>result_s,
-                 sub=>sub_s);
+                 result=>result_s);
       
       S <= result_s(31);
       e <= result_s(30 downto 23);
@@ -51,9 +48,8 @@ begin
 		
 		testbench : process
         begin
-        sub_s <= '0';
-       	A_s <= "00000001100000000000000000000011" ;
-		B_s <= "00000001100000000000000000000001" ;
+       	A_s <= "01000001001100000000000000000000" ;
+		    B_s <= "01000000100100000000000000000000" ;
         wait for 20 ps;
       
         end process testbench;

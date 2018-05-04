@@ -24,14 +24,14 @@ architecture rtl of Lead_zeros_counter_tb is
 component Lead_zeros_counter
 port (
 	add_sub_cout : in std_logic;
-	num : in std_logic_vector(21 downto 0);	
+	num : in std_logic_vector(23 downto 0);	
 	side_to_shift : out std_logic;
 	result : out std_logic_vector(4 downto 0)
 	);
 end component;  
 
 signal add_sub_cout_s : std_logic;
-signal num_s : std_logic_vector(21 downto 0);
+signal num_s : std_logic_vector(23 downto 0);
 signal side_to_shift_s : std_logic;
 signal result_s : std_logic_vector(4 downto 0);
 
@@ -44,14 +44,14 @@ begin
 		
 		testbench : process
         begin
-        add_sub_cout_s <= '1';
-       	num_s <= "0010000001000000100000" ;
+        add_sub_cout_s <= '0';
+       	num_s <= "001000000100000010000000" ;
         wait for 20 ps;
 		
-        num_s <= "0000100001000000100100" ;
+        num_s <= "000010000100000010010000" ;
         wait for 20 ps;
 		
-        num_s <= "0100100001000000100001" ;
+        num_s <= "010010000100000010000100" ;
         wait for 20 ps;
       
         end process testbench;

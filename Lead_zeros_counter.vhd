@@ -18,7 +18,7 @@ use ieee.numeric_std.all;
 entity Lead_zeros_counter is 
 port (
 	add_sub_cout : in std_logic;
-	num : in std_logic_vector(21 downto 0);	
+	num : in std_logic_vector(23 downto 0);	
 	side_to_shift : out std_logic;
 	result : out std_logic_vector(4 downto 0)
 	);
@@ -32,10 +32,10 @@ begin
 	variable leading_zeros : integer;
 	begin
 		if add_sub_cout='1' then
-			result <= "00001";
+			result <= "00000";
 		else
 		leading_zeros := 0;
-		for i in 21 downto 0 loop
+		for i in 23 downto 0 loop
 			if num(i)='1' then
 				exit;
 			end if;

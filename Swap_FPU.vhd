@@ -15,11 +15,11 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity Swap_FPU is port (
-	f1 : in std_logic_vector(22 downto 0);	
-	f2 : in std_logic_vector(22 downto 0);
+	f1 : in std_logic_vector(23 downto 0);	
+	f2 : in std_logic_vector(23 downto 0);
 	SEL : in std_logic; 
-	o1 : out std_logic_vector(22 downto 0);
-	o2 : out std_logic_vector(22 downto 0)
+	o1 : out std_logic_vector(23 downto 0);
+	o2 : out std_logic_vector(23 downto 0)
 	);
 end Swap_FPU;
 
