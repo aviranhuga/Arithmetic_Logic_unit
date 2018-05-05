@@ -84,7 +84,7 @@ one <= "00000001";
 		cout => open,
 		result => Exponent_adder_result);
 		
-	process(A,B)
+	process(A,B,New_f,s1,s2,Exponent_adder_result,bias,one)
 	begin
 		if New_f(47)='1' then
 			Result(31) <= s1 XOR s2;

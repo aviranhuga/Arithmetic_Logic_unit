@@ -22,6 +22,7 @@ port (
 	B : in std_logic_vector(N-1 downto 0);	
 	Opcode : in std_logic_vector(3 downto 0);
 	clk : in std_logic;
+	SW8_FP : in std_logic;
 	HI : out std_logic_vector(N-1 downto 0);
 	LO : out std_logic_vector(N-1 downto 0);
 	status: out std_logic_vector(5 downto 0)
@@ -50,6 +51,17 @@ port (
 	);
 end component;
 
+component FP_unit 
+	port (
+	A : in std_logic_vector(7 downto 0);
+	B : in std_logic_vector(7 downto 0);	
+	SW8 : in std_logic;
+	Opcode : in std_logic_vector(3 downto 0);
+	HI : out std_logic_vector(7 downto 0);
+	LO : out std_logic_vector(7 downto 0)
+	);
+end component;
+
 component Arithmetic_unit 
 generic ( N: integer :=8);
 port (
@@ -69,7 +81,9 @@ port (
 	shift_unit_INPUT : in std_logic_vector(N-1 downto 0);-- shift register output
 	AU_LO_INPUT : in std_logic_vector(N-1 downto 0);-- Arithmetic unit output LO
 	AU_HI_INPUT : in std_logic_vector(N-1 downto 0);-- Arithmetic unit output HI
-	AU_status : in std_logic_vector(5 downto 0);-- MIN_MAX output
+	FPU_LO_INPUT : in std_logic_vector(7 downto 0);-- FPU LO
+	FPU_HI_INPUT : in std_logic_vector(7 downto 0);-- FPU HI
+	AU_status : in std_logic_vector(5 downto 0);-- AU status 
 	SEL : in std_logic_vector(1 downto 0);
 	output_LO : out std_logic_vector(N-1 downto 0) := (others => '0');	
 	output_HI : out std_logic_vector(N-1 downto 0) := (others => '0');
@@ -87,6 +101,8 @@ signal shift_unit_result: std_logic_vector(N-1 downto 0);
 signal AU_HI_output: std_logic_vector(N-1 downto 0);
 signal AU_LO_output: std_logic_vector(N-1 downto 0);
 signal AU_status_output: std_logic_vector(5 downto 0);
+signal FPU_LO_output: std_logic_vector(7 downto 0);
+signal FPU_HI_output: std_logic_vector(7 downto 0);
 
 begin
 	
@@ -97,6 +113,8 @@ begin
 	shift_unit_INPUT => shift_unit_result,
 	AU_LO_INPUT => AU_LO_output,
 	AU_HI_INPUT => AU_HI_output,
+	FPU_LO_INPUT => FPU_LO_output,
+	FPU_HI_INPUT => FPU_HI_output,
 	AU_status => AU_status_output,
 	SEL => ALU_OUT_SELECTOR_SEL,
 	output_LO => LO,
@@ -121,6 +139,15 @@ begin
 	HI => AU_HI_output,
 	LO => AU_LO_output,
 	status => AU_status_output);
+	
+	FP_unit_s: FP_unit
+	port map(
+	A => A,
+	B => B,
+	SW8 => SW8_FP,
+	Opcode => Opcode,
+	LO => FPU_LO_output,
+	HI => FPU_HI_output);
 	
 	ALU_CU_s: ALU_CU
 	port map(

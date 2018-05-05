@@ -23,6 +23,7 @@ port (
 	key1_en : in std_logic;
 	key2_en : in std_logic;
 	clock : in std_logic;
+	SW8 : in std_logic;
 	HI_seven_seg1 : out std_logic_vector(6 downto 0);
 	HI_seven_seg2 : out std_logic_vector(6 downto 0);
 	LO_seven_seg1 : out std_logic_vector(6 downto 0);
@@ -40,6 +41,7 @@ port (
 	B : in std_logic_vector(N-1 downto 0);	
 	Opcode : in std_logic_vector(3 downto 0);
 	clk : in std_logic;
+	SW8_FP : in std_logic;
 	HI : out std_logic_vector(N-1 downto 0);
 	LO : out std_logic_vector(N-1 downto 0);
 	status: out std_logic_vector(5 downto 0)
@@ -108,6 +110,7 @@ begin
 	B  => ALU_B_IN,
 	Opcode => ALU_OP_IN,
 	clk => alu_clk_tmp,
+	SW8_FP => SW8,
 	HI => ALU_HI_OUT,
 	LO => ALU_LO_OUT,
 	status=>ALU_Status_OUT);

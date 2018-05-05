@@ -32,7 +32,7 @@ begin
 	one(N-1 downto 1) <= (others => '0');
 	
  --Design Body
-	process(Input)
+	process(Input,one)
 		begin
 		if (Input(N-1)='0') then -- positive input
 			Output <= Input;

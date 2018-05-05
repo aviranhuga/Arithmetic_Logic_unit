@@ -28,8 +28,6 @@ signal after_rounding : std_logic_vector(22 downto 0);
 --signal test : std_logic_vector(22 downto 0);
 
 begin                                
-
-
 	process(Input)
 	begin
 		for i in 0 to 22 loop
@@ -38,6 +36,7 @@ begin
 				after_rounding(i-1) <= '1';
 				exit;
 			end if;
+			after_rounding(i) <= Input(i);
 		end loop;
 	end process;
 	--test <= "00000000000000000000001";

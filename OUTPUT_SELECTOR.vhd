@@ -20,6 +20,8 @@ port (
 	shift_unit_INPUT : in std_logic_vector(N-1 downto 0);-- shift register output
 	AU_LO_INPUT : in std_logic_vector(N-1 downto 0);-- Arithmetic unit output LO
 	AU_HI_INPUT : in std_logic_vector(N-1 downto 0);-- Arithmetic unit output HI
+	FPU_LO_INPUT : in std_logic_vector(7 downto 0);-- FPU LO
+	FPU_HI_INPUT : in std_logic_vector(7 downto 0);-- FPU HI
 	AU_status : in std_logic_vector(5 downto 0);-- AU status 
 	SEL : in std_logic_vector(1 downto 0);
 	output_LO : out std_logic_vector(N-1 downto 0) := (others => '0');	
@@ -31,7 +33,7 @@ end OUTPUT_SELECTOR;
 architecture OUTPUT_SELECTOR_arch of OUTPUT_SELECTOR is
 begin                                         
 -- Design Body
-	process(shift_unit_INPUT,AU_LO_INPUT,AU_status,SEL,AU_HI_INPUT)
+	process(shift_unit_INPUT,AU_LO_INPUT,AU_status,SEL,AU_HI_INPUT,FPU_HI_INPUT,FPU_LO_INPUT)
 		begin
 		case SEL is
 			when "00" => --shift_unit_out
@@ -45,6 +47,10 @@ begin
 			when "10" => -- AU LO AND HI
 				output_HI <= AU_HI_INPUT;
 				output_LO <= AU_LO_INPUT;
+				output_status <= (others => '0');
+			when "11" => -- "11" for FPU
+				output_HI <= FPU_HI_INPUT;
+				output_LO <= FPU_LO_INPUT;
 				output_status <= (others => '0');
 			when others =>
 				output_HI <= (others => '0');

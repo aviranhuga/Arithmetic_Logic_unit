@@ -37,33 +37,43 @@ begin
 		begin
 		if rising_edge(clk_cu) then
 		case Opcode_cu is
+		when "1100" | "1101" => --FPU opcode
+			shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
+			ALU_MAC_STATUS <= '0';	
+			AU_temp_clk <= '0'; -- clock for AU
+			ALU_OUT_SELECTOR_SEL_cu <= "11"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' FPU 
 		when "1000" | "1001" => --shift opcode
 			ALU_MAC_STATUS <= '0';
 			shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
 			AU_temp_clk <= '0'; -- clock for AU
 			ALU_OUT_SELECTOR_SEL_cu <= "00"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 		when "0101" | "0110" | "0001" | "0010" | "0111" => -- MIN/MAX/ADD/SUB/RST
+			shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
 			ALU_MAC_STATUS <= '0';
 			AU_temp_clk <= (not AU_temp_clk); -- clock for AU
 			ALU_OUT_SELECTOR_SEL_cu <= "01"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 		when "0011" => -- MUL OPCODE
+			shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
 			ALU_MAC_STATUS <= '0';
 			AU_temp_clk <= (not AU_temp_clk); -- clock for AU
 			ALU_OUT_SELECTOR_SEL_cu <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros		
 		when "0100" => --MAC OPCODE
 			if ALU_MAC_STATUS='0' then
+				shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
 				ALU_MAC_STATUS <= '1';					
 				AU_temp_clk <= (not AU_temp_clk); -- clock for AU
 				ALU_OUT_SELECTOR_SEL_cu <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 			else
+				shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
 				AU_temp_clk <= (not AU_temp_clk); -- clock for AU
 				ALU_MAC_STATUS <= '0';
 				ALU_OUT_SELECTOR_SEL_cu <= "10"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
 			end if;
 		when others =>
+			shift_left_or_right_cu <= Opcode_cu(0); --'0' for right, '1' for left
 			ALU_MAC_STATUS <= '0';	
 			AU_temp_clk <= '0'; -- clock for AU
-			ALU_OUT_SELECTOR_SEL_cu <= "11"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' all zeros
+			ALU_OUT_SELECTOR_SEL_cu <= "00"; --'00' shift,'01' AU_LO,'10' AU_LO_HI,'11' FPU 
 		end case;
 		end if;
 	end process;
