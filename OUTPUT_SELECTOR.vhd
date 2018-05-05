@@ -31,7 +31,7 @@ end OUTPUT_SELECTOR;
 architecture OUTPUT_SELECTOR_arch of OUTPUT_SELECTOR is
 begin                                         
 -- Design Body
-	process(shift_unit_INPUT,AU_LO_INPUT,AU_status,SEL)
+	process(shift_unit_INPUT,AU_LO_INPUT,AU_status,SEL,AU_HI_INPUT)
 		begin
 		case SEL is
 			when "00" => --shift_unit_out

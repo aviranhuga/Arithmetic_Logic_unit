@@ -26,19 +26,18 @@ end Absoult_value;
 architecture Absoult_value_arch of Absoult_value is
 
 signal one : std_logic_vector(N-1 downto 0);
-signal not_input : std_logic_vector(N-1 downto 0);
 
 begin                
 	one(0) <= '1';
 	one(N-1 downto 1) <= (others => '0');
-	not_input <= not Input;
--- Design Body
+	
+ --Design Body
 	process(Input)
 		begin
-		if (Input(7)='0') then -- positive input
+		if (Input(N-1)='0') then -- positive input
 			Output <= Input;
 		else 
-			Output <= SIGNED(not_input) + SIGNED(one);
+			Output <= UNSIGNED(not Input)+ UNSIGNED(one);
 		end if;
 	end process;
 end Absoult_value_arch;
