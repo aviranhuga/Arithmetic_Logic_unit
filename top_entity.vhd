@@ -84,10 +84,6 @@ signal ALU_HI_OUT: std_logic_vector(7 downto 0);
 signal ALU_LO_OUT: std_logic_vector(7 downto 0);
 signal ALU_Status_OUT: std_logic_vector(5 downto 0);
 
-signal alu_clk_tmp: std_logic;
-signal q_int : std_logic_vector (31 downto 0):=x"00000000";
-
-
 begin
 	
 	--component init
@@ -109,7 +105,7 @@ begin
 	A  => ALU_A_IN,
 	B  => ALU_B_IN,
 	Opcode => ALU_OP_IN,
-	clk => alu_clk_tmp,
+	clk => clock,
 	SW8_FP => SW8,
 	HI => ALU_HI_OUT,
 	LO => ALU_LO_OUT,
@@ -127,12 +123,4 @@ begin
 	LO_seven_seg2 => LO_seven_seg2,
 	Status_out => Status_out);
 	
-	alu_clk_tmp <= q_int(11);
-	
-	process (clock)
-    begin
-        if (rising_edge(clock)) then
-           q_int <= q_int + 1;
-	     end if;
-    end process;
 end top_entity_arch;

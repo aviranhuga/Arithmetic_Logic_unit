@@ -102,7 +102,6 @@ signal Alignment_Shifter_result : std_logic_vector(23 downto 0);
 signal Absoult_value_result : std_logic_vector(7 downto 0); 
 signal Significand_add_sub_result : std_logic_vector(25 downto 0);
 signal Significand_add_sub_result_AB : std_logic_vector(25 downto 0);
-signal Significand_add_sub_cout : std_logic;
 signal Lead_zeros_counter_side : std_logic;
 signal max_exponent : std_logic_vector(15 downto 0);
 signal exponent_befor_bias : std_logic_vector(7 downto 0);
@@ -116,7 +115,6 @@ signal Significand_add_sub_o1 : std_logic_vector(25 downto 0);
 signal Significand_add_sub_o2 : std_logic_vector(25 downto 0);
 
 signal one_signal: std_logic;
-signal one_vector: std_logic_vector(7 downto 0);
 signal zero_signal: std_logic;
 signal bias: std_logic_vector(7 downto 0);
 signal subtract_signal : std_logic;
@@ -132,7 +130,6 @@ f1(22 downto 0) <= A(22 downto 0);
 f2(23) <= '1';
 f2(22 downto 0) <= B(22 downto 0);
 one_signal <= '1';
-one_vector <= "00000001";
 zero_signal <= '0';
 bias <= "01111111";
 subtract_signal <= s1 xor s2; --for Significand_add_sub
@@ -176,7 +173,7 @@ Significand_add_sub_o2(23 downto 0) <= Swap_add_sub_o2;
 		
 	Swap_for_add_sub: Swap_FPU
 		port map(
-		f1 => f1,
+		f1 => Swap_o1,
 		f2 => Alignment_Shifter_result,
 		SEL => subtract_swap_sel,
 		o1 => Swap_add_sub_o1,
@@ -188,7 +185,7 @@ Significand_add_sub_o2(23 downto 0) <= Swap_add_sub_o2;
 		x => Significand_add_sub_o1,
 		y => Significand_add_sub_o2,
 		sub => subtract_signal,
-		cout => Significand_add_sub_cout,
+		cout => open,
 		result => Significand_add_sub_result);
 		
 	Significand_add_sub_AB: Absoult_value
